@@ -164,19 +164,21 @@ class MainView : Application() {
             it.status == LetterStatus.RIGHT
         }.toSet()
 
-        val notIntTheseLetters = wordLimits.filter {
-            it.status == LetterStatus.WRONG
-        }.map { it.letter }.toSet().minus(wrongIndeCell.map { it.letter }.toSet()).minus(correctLetterCell.map { it.letter }
-            .toSet())
+        val notIntTheseLetters = wordLimits
+            .filter { it.status == LetterStatus.WRONG }
+            .map { it.letter }.toSet()
+            .minus(wrongIndeCell.map { it.letter }.toSet())
+            .minus(correctLetterCell.map { it.letter }.toSet())
+            .toSet()
 
 
         val respContainer = ScrollPane().apply {
             content = VBox().apply {
                 WORD_LIST.filter {
-                    it.first.length == TARGET_WORD_LENGTH &&
-                            notIntTheseLetters.none { letter -> it.first.contains(letter) }
+                    it.first.length == TARGET_WORD_LENGTH
+                            && notIntTheseLetters.none { letter -> it.first.contains(letter) }
                             && correctLetterCell.all { cell -> it.first[cell.index] + "" == cell.letter }
-                            && wrongIndeCell.all { cell -> it.first[cell.index] + "" != cell.letter }
+                            && wrongIndeCell.all { cell -> it.first[cell.index] + "" != cell.letter && it.first.contains(cell.letter)  }
                 }.forEachIndexed { index, wordPair ->
                     println(wordPair)
                     if (index < 30) {
